@@ -104,6 +104,7 @@ def main():
     task_2_runtime = task_2_stop_time - task_2_start_time
 
     print("\tTask 2 took", task_2_runtime, "seconds to run")
+    print("\n")
 
     task_3_start_time = timeit.default_timer()
 
