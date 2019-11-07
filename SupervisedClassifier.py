@@ -178,7 +178,7 @@ def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
 
 def main():
     for num_rows in [500, 1000, 3000]:
-        print("Output for 500 rows")
+        print("Output for", num_rows, "rows")
         sneakers_data, boots_data, sneakers_labels, boots_labels = task1(num_rows)
 
         task2(sneakers_data, boots_data, sneakers_labels, boots_labels)
