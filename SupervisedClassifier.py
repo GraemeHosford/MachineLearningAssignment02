@@ -51,7 +51,6 @@ def task2(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
     train_times = []
     predict_times = []
     accuracies = []
-    avg_accuracies = []
 
     print("\tTask 2 output")
     num_splits = 4
@@ -111,9 +110,10 @@ def task2(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
     print("\tMaximum accuracy was", np.max(accuracies), "%")
     print("\tAverage accuracy was", np.mean(accuracies), "%\n")
 
-    avg_accuracies.append(np.mean(accuracies))
-
-    return np.max(avg_accuracies)
+    print("\tTotal train time for all k-folds in perceptron with gamma value of =",
+          np.sum(train_times), "seconds")
+    print("\tTotal prediction time for all k-folds in perceptron with gamma of =",
+          np.sum(predict_times), "seconds\n")
 
 
 def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
@@ -183,6 +183,11 @@ def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
     print("\tMinimum accuracy was", np.min(accuracies), "%")
     print("\tMaximum accuracy was", np.max(accuracies), "%")
     print("\tAverage accuracy was", np.mean(accuracies), "%\n")
+
+    print("\tTotal train time for all k-folds in", kernel_type, "with gamma value of", gamma, "=",
+          np.sum(train_times), "seconds")
+    print("\tTotal prediction time for all k-folds in", kernel_type, "with gamma of", gamma, "=",
+          np.sum(predict_times), "seconds\n")
 
 
 def main():
