@@ -51,6 +51,7 @@ def task2(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
     train_times = []
     predict_times = []
     accuracies = []
+    avg_accuracies = []
 
     print("\tTask 2 output")
     num_splits = 4
@@ -100,17 +101,23 @@ def task2(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
 
     print("\tThe minimum train time was", np.min(train_times), "seconds")
     print("\tThe maximum train time was", np.max(train_times), "seconds")
-    print("\tThe average train time was", np.average(train_times), "seconds\n")
+    print("\tThe average train time was", np.mean(train_times), "seconds\n")
 
     print("\tThe minimum prediction time was", np.min(predict_times), "seconds")
     print("\tThe maximum prediction time was", np.max(predict_times), "seconds")
-    print("\tThe average prediction time was", np.average(predict_times), "seconds\n")
+    print("\tThe average prediction time was", np.mean(predict_times), "seconds\n")
 
-    print("\tAverage accuracy was", np.average(accuracies), "%\n")
+    print("\tMinimum Accuracy was", np.min(accuracies), "%")
+    print("\tMaximum accuracy was", np.max(accuracies), "%")
+    print("\tAverage accuracy was", np.mean(accuracies), "%\n")
+
+    avg_accuracies.append(np.mean(accuracies))
+
+    return np.max(avg_accuracies)
 
 
 def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
-          sneakers_labels: pd.DataFrame, boots_labels: pd.DataFrame, kernel_type: str):
+          sneakers_labels: pd.DataFrame, boots_labels: pd.DataFrame, kernel_type: str, gamma: float):
     full_data = sneakers_data.append(boots_data)
     full_labels = sneakers_labels.append(boots_labels)
 
@@ -118,7 +125,7 @@ def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
     predict_times = []
     accuracies = []
 
-    print("\tTask 3 output")
+    print("\tTask 3 output for", kernel_type, "and gamma of", gamma)
     num_splits = 4
     for train_index, test_index in KFold(n_splits=num_splits, shuffle=True).split(full_data):
         train_data = full_data.iloc[train_index]
@@ -127,7 +134,7 @@ def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
         train_labels = full_labels.iloc[train_index]
         test_labels = full_labels.iloc[test_index]
 
-        clf = svm.SVC(kernel=kernel_type, gamma=1e-3)
+        clf = svm.SVC(kernel=kernel_type, gamma=gamma)
 
         train_start_time = timeit.default_timer()
         clf.fit(train_data, train_labels)
@@ -167,13 +174,15 @@ def task3(sneakers_data: pd.DataFrame, boots_data: pd.DataFrame,
 
     print("\tThe minimum train time was", np.min(train_times), "seconds")
     print("\tThe maximum train time was", np.max(train_times), "seconds")
-    print("\tThe average train time was", np.average(train_times), "seconds\n")
+    print("\tThe average train time was", np.mean(train_times), "seconds\n")
 
     print("\tThe minimum prediction time was", np.min(predict_times), "seconds")
     print("\tThe maximum prediction time was", np.max(predict_times), "seconds")
-    print("\tThe average prediction time was", np.average(predict_times), "seconds\n")
+    print("\tThe average prediction time was", np.mean(predict_times), "seconds\n")
 
-    print("\tAverage accuracy was", np.average(accuracies), "%\n")
+    print("\tMinimum accuracy was", np.min(accuracies), "%")
+    print("\tMaximum accuracy was", np.max(accuracies), "%")
+    print("\tAverage accuracy was", np.mean(accuracies), "%\n")
 
 
 def main():
@@ -183,8 +192,10 @@ def main():
 
         task2(sneakers_data, boots_data, sneakers_labels, boots_labels)
 
-        task3(sneakers_data, boots_data, sneakers_labels, boots_labels, "linear")
-        task3(sneakers_data, boots_data, sneakers_labels, boots_labels, "rbf")
+        for kernel in ["linear", "rbf"]:
+            for gamma in [1e-3, 1e-5, 1e-6, 1e-7]:
+                task3(sneakers_data, boots_data, sneakers_labels, boots_labels, kernel, gamma)
+                task3(sneakers_data, boots_data, sneakers_labels, boots_labels, kernel, gamma)
 
 
 main()
